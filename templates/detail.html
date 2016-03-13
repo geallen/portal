@@ -1,6 +1,16 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% load i18n %}
 
 {% block content %}
+    {% if user.is_authenticated %}
+
+    <div class="col-sm-8">
         <h1>{{ post.message }}</h1>
+        <br>
+    <p>{% trans "Edit Post" %}? <a href="{% url 'comodo:post_edit' post.id %}">{% trans "Edit" %}</a>!</p>
+    </div>
+        {% else %}
+        <p>Login olun</p>
+    {% endif %}
 {% endblock %}

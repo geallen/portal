@@ -8,6 +8,8 @@ app_name = 'comodo'
 urlpatterns = [
     url(r'^$',views.IndexView.as_view(), name='index'),
     url(r'^(?P<pk>\d+)/$', views.DetailView.as_view(), name='detail'),
+    url(r'^post_edit/(?P<pk>\d+)/', views.EditPostView.as_view(), name='post_edit'),
+    url(r'^registers/$', views.SignUpView.as_view(), name='registers'),
     url(r'^accounts/login/$',
     auth_views.login,
     {'template_name': 'login.html'},

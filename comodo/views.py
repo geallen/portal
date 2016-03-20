@@ -52,7 +52,7 @@ def register(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST) # filled form/i'm skipping validation for this example
         if form.is_valid():
-           form.save()
+           form.save(commit=True)
         return HttpResponseRedirect('/comodo/') # go to some other page if successfully saved
 
     else:

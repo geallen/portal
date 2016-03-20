@@ -16,7 +16,6 @@
                 <div class="form-group">
                     <input type="text" name="username" class="form-control" placeholder="Kullanici Adi" style="text-align: center;"><br>
                     <select class="form-control" id="sel2" name="city" style="text-align: center;">
-
                         <option value="1">Adana</option>
                         <option value="2">Adıyaman</option>
                         <option value="3">Afyonkarahisar</option>
@@ -103,13 +102,12 @@
                     <input type="password" name="password1" class="form-control" placeholder="Password" style="text-align: center;"><br>
                     <input type="password" name="password2" class="form-control" placeholder="Confirm Password"
                            style="text-align: center;"><br>
-                    <label class="radio-inline boy"><input type="radio" name="optradio">Yardım Gönüllüsüyüm</label>
-                    <label class="radio-inline boy"><input type="radio" name="optradio">İhtiyaç Sahibiyim</label><br>
+                    <label class="radio-inline boy"><input type="radio" value="1" name="user_status">Yardım Gönüllüsüyüm</label>
+                    <label class="radio-inline boy"><input type="radio" value="2" name="user_status">İhtiyaç Sahibiyim</label><br>
                     <hr>
                     <input type="submit" value="{% trans 'Kayit Ol' %}" class="btn btn-primary btn-block"/>
                 </div>
             </form>
-{#        </div>#}
         </div>
     </div>
 {% endblock %}

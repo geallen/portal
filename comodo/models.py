@@ -6,22 +6,8 @@ from django.conf import settings
 
 # Create your models here.
 
-
-# class PortalUser(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     phone_number = models.IntegerField()
-#     address = models.TextField()
-#     username = models.CharField(max_length=255,unique=True)
-#     # USERNAME_FIELD = 'username'
-#     # REQUIRED_FIELDS = ['address']
-#     def __unicode__(self):
-#         return self.user.first_name
-#
-#     def __str__(self):
-#         return self.user.first_name
-
 class MyUserManager(BaseUserManager):
-    def create_user(self, email, city, password=None):
+    def create_user(self, email, city, user_status,password=None):
         """
         Creates and saves a User with the given email, date of
         birth and password.
@@ -32,20 +18,23 @@ class MyUserManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email),
             city=city,
+            user_status=user_status
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, city, password):
+    def create_superuser(self,email, city, password):
         """
         Creates and saves a superuser with the given email, date of
         birth and password.
         """
+        user_status=1
         user = self.create_user(email,
             password=password,
             city = city,
+            user_status=1,
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -60,9 +49,14 @@ class MyUser(AbstractBaseUser):
         unique=True,
     )
 
+    USER_STATUS = ((1, 'volunteer'), (2, 'recipant'))
+    USER_STATUS_DICT = dict((v, k) for k, v in USER_STATUS)
     city = models.CharField(max_length=60)
+    user_status = models.PositiveSmallIntegerField(choices=USER_STATUS)
+
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+
 
     objects = MyUserManager()
 
@@ -90,6 +84,9 @@ class MyUser(AbstractBaseUser):
         "Does the user have permissions to view the app `app_label`?"
         # Simplest possible answer: Yes, always
         return True
+
+    def ustatus(self):
+        return self.user_status
 
     @property
     def is_staff(self):

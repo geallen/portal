@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block content %}
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and user.user_status == 1 %}
 
     <div class="col-sm-8">
         <h1>{{ post.message }}</h1>
@@ -11,6 +11,6 @@
     <p>{% trans "Edit Post" %}? <a href="{% url 'comodo:post_edit' post.id %}">{% trans "Edit" %}</a>!</p>
     </div>
         {% else %}
-        <p>Login olun</p>
+        <p>Bu alani gorme yetkiniz yok...</p>
     {% endif %}
 {% endblock %}

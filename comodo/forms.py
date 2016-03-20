@@ -4,18 +4,18 @@ from django import forms
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, ButtonHolder, Submit, Div
-from crispy_forms.bootstrap import InlineField
 from .models import MyUser, Post
 from registration.forms import RegistrationForm
 
-class RegistrationForm(UserCreationForm):
+class RegistrationsForm(RegistrationForm):
 
     email = forms.EmailField(required = True)
     city = forms.CharField(max_length=129)
+    # user_status = forms.ChoiceField(choices=MyUser.USER_STATUS_DICT, widget=forms.RadioSelect)
 
     class Meta:
         model = MyUser
-        fields = ('username','email', 'city')
+        fields = ('username','email', 'city','user_status',)
 
         # def __init__(self, *args, **kwargs):
         #     super(RegistrationForm, self).__init__(*args, **kwargs)

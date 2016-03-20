@@ -6,6 +6,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, ButtonHolder, Submit, Div
 from crispy_forms.bootstrap import InlineField
 from .models import MyUser, Post
+from registration.forms import RegistrationForm
 
 class RegistrationForm(UserCreationForm):
 
@@ -14,7 +15,7 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = MyUser
-        fields = ('email', 'city')
+        fields = ('username','email', 'city')
 
         # def __init__(self, *args, **kwargs):
         #     super(RegistrationForm, self).__init__(*args, **kwargs)

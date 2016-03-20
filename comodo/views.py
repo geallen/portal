@@ -5,7 +5,7 @@ from .models import Post
 from .forms import RegistrationForm, EditPostForm, CreatePostForm
 from django.contrib.auth.models import User
 from .models import MyUser
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
 from  django.template.context_processors import csrf
 
 
@@ -50,14 +50,17 @@ class DetailView(generic.DetailView):
 
 def register(request):
     if request.method == "POST":
-        form = RegistrationForm(request.POST) # filled form/i'm skipping validation for this example
+        form = RegistrationForm(request.POST)  # filled form/i'm skipping validation for this example
         if form.is_valid():
-           form.save(commit=True)
-        return HttpResponseRedirect('/comodo/') # go to some other page if successfully saved
+            form.save(commit=True)
+            print("Form is valid")
+        else:
+            return HttpResponse(str((form.errors)))
+        return HttpResponseRedirect('/comodo/')  # go to some other page if successfully saved
 
     else:
-        form = RegistrationForm # if the user accessed the register url directly, just display the empty form
-    return render(request, 'register.html',  {'form': form})
+        form = RegistrationForm  # if the user accessed the register url directly, just display the empty form
+    return render(request, 'register.html', {'form': form})
 #
 #     def form_valid(self, form):
 #         obj = form.save(commit=False)

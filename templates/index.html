@@ -4,37 +4,70 @@
 {% block content %}
 
     {% for post in postList %}
-        <a href="{% url 'comodo:detail' post.id %}">{{ post.title }}</a></br></br>
+        {#        <a href="{% url 'comodo:detail' post.id %}">{{ post.title }}</a></br></br>#}
+
+        <div class="col-md-4">
+            <a href="{% url 'comodo:detail' post.id %}" class="thumbnail" data-toggle='tooltip' data-placement='bottom'
+               title='Buraya Açıklama Yazısı Eklenecektir.!'>
+
+                <img src="http://lorempixel.com/image_output/abstract-q-c-640-480-8.jpg" alt="Pulpit Rock"
+                     style="width:230px;height:230px">
+                <p>{{ post.title }}</p>
+            </a>
+        </div>
     {% endfor %}
 
-{#    {% if poll_list %}#}
-{#<ul>#}
-{#    {% for poll in poll_list %}#}
-{#    <li><a href="{% url 'polls:poll' poll.id %}">{{ poll.p_date }}</a></li>#}
-{#        <p>{{ poll.p_content }}</p>#}
-{#    </li>#}
-{#    {% endfor %}#}
-{#</ul>#}
+    {#    {% if poll_list %}#}
+    {#<ul>#}
+    {#    {% for poll in poll_list %}#}
+    {#    <li><a href="{% url 'polls:poll' poll.id %}">{{ poll.p_date }}</a></li>#}
+    {#        <p>{{ poll.p_content }}</p>#}
+    {#    </li>#}
+    {#    {% endfor %}#}
+    {#</ul>#}
 
-{% if is_paginated %}
-    <div class="pagination">
-        <span class="page-links">
-            {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-            {% endif %}
-            <span class="page-current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-            </span>
-            {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">next</a>
-            {% endif %}
-        </span>
-    </div>
-{% endif %}
+    {% if is_paginated %}
+        {#    <div class="pagination">#}
+        {#        <span class="page-links">#}
+        {#            {% if page_obj.has_previous %}#}
+        {#            <a href="?page={{ page_obj.previous_page_number }}">previous</a>#}
+        {#            {% endif %}#}
+        {#            <span class="page-current">#}
+        {#                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}#}
+        {#            </span>#}
+        {#            {% if page_obj.has_next %}#}
+        {#            <a href="?page={{ page_obj.next_page_number }}">next</a>#}
+        {#            {% endif %}#}
+        {#        </span>#}
+        {#    </div>#}
+        <nav>
+            <ul class="pagination">
+                <li>
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous"><span
+                                aria-hidden="true">&raquo;</span></a>
+                    {% endif %}
+                    </a>
+                </li>
+                {% for pages in page_numbers %}
+                    <li><a href="?page={{ pages }}">{{ pages }}</a></li>
+                {% endfor %}
+                <li>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" aria-label="Next"><span
+                                aria-hidden="true">&raquo;</span></a>
+                    {% endif %}
+                </li>
+            </ul>
+        </nav>
+    {% endif %}
 
-{##}
-{#{% else %}#}
-{#    <p>No polls.</p>#}
-{#{% endif %}#}
+
+    {##}
+    {#{% else %}#}
+    {#    <p>No polls.</p>#}
+    {#{% endif %}#}
 
 {% endblock %}
+
+

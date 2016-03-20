@@ -6,13 +6,14 @@ from django.conf import settings
 
 # Create your models here.
 
-#
+
 # class PortalUser(models.Model):
 #     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     username = models.TextField()
-#     phone_number = models.TextField()
+#     phone_number = models.IntegerField()
 #     address = models.TextField()
-#
+#     username = models.CharField(max_length=255,unique=True)
+#     # USERNAME_FIELD = 'username'
+#     # REQUIRED_FIELDS = ['address']
 #     def __unicode__(self):
 #         return self.user.first_name
 #
@@ -20,7 +21,7 @@ from django.conf import settings
 #         return self.user.first_name
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, email, date_of_birth, password=None):
+    def create_user(self, email, city, password=None):
         """
         Creates and saves a User with the given email, date of
         birth and password.
@@ -30,21 +31,21 @@ class MyUserManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
-            date_of_birth=date_of_birth,
+            city=city,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, date_of_birth, password):
+    def create_superuser(self, email, city, password):
         """
         Creates and saves a superuser with the given email, date of
         birth and password.
         """
         user = self.create_user(email,
             password=password,
-            date_of_birth=date_of_birth
+            city = city,
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -58,22 +59,24 @@ class MyUser(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    date_of_birth = models.DateField()
+
+    city = models.CharField(max_length=60)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
     objects = MyUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['date_of_birth']
+    REQUIRED_FIELDS = ['city']
 
     def get_full_name(self):
-        # The user is identified by their email address
         return self.email
 
     def get_short_name(self):
-        # The user is identified by their email address
         return self.email
+
+    def get_city(self):
+        return self.city
 
     def __str__(self):              # __unicode__ on Python 2
         return self.email
@@ -96,6 +99,7 @@ class MyUser(AbstractBaseUser):
 
 
 class Post(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=120)
     message = models.TextField()
     release_date = models.DateTimeField(auto_now=True, auto_now_add=False)
@@ -108,13 +112,22 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-class PostConfirmation(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
+class PostConfirmation(Post):
+    added_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='post_added')
+    approved_by = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='post_approved')
 
     def __unicode__(self):
         return self.user.name
 
     def __str__(self):
         return self.user.name
+
+class Material(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    material_name = models.CharField(max_length=120)
+    material_message = models.TextField()
+    reserved_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='material_reserved_by')
+    ORDER_STATUS = ((0, 'not_rezerved'), (1, 'rezerved'), (2, 'given'))
+    ORDER_STATUS_DICT = dict((v, k) for k, v in ORDER_STATUS)
+    status = models.PositiveSmallIntegerField(choices=ORDER_STATUS)
+

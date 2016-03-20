@@ -8,7 +8,7 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-from .models import MyUser
+from .models import MyUser,PostConfirmation
 
 
 class UserCreationForm(forms.ModelForm):
@@ -68,7 +68,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('username','email','city', 'is_admin')
     list_filter = ('is_admin',)
     fieldsets = (
-        (None, {'fields': ('username','email', 'password')}),
+        (None, {'fields': ('username','email', 'user_status' ,'password')}),
         ('Personal info', {'fields': ('username','user_status','email','city',)}),
         ('Permissions', {'fields': ('is_admin',)}),
     )
@@ -77,7 +77,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'city', 'password1', 'password2')}
+            'fields': ('email', 'city','user_status', 'password1', 'password2')}
         ),
     )
     search_fields = ('email',)
@@ -91,5 +91,4 @@ admin.site.register(MyUser, UserAdmin)
 admin.site.unregister(Group)
 
 admin.site.register(Post)
-
 

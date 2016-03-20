@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from django.shortcuts import render
 from django.views import generic
 from .models import Post
-from .forms import RegistrationsForm, EditPostForm, CreatePostForm, LoginForm
+from .forms import RegistrationsForm, EditPostForm, CreatePostForm, LoginForm, PostConfirmationForm
 from django.contrib.auth.models import User
 from .models import MyUser
 from django.http import HttpResponseRedirect,HttpResponse,Http404

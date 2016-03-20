@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'registration',
     'crispy_forms',
+    'rest_framework',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -139,3 +140,11 @@ REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 AUTH_USER_MODEL = 'comodo.MyUser'
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}

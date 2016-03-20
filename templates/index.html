@@ -5,6 +5,7 @@
 
     {% for post in postList %}
         {#        <a href="{% url 'comodo:detail' post.id %}">{{ post.title }}</a></br></br>#}
+        {% if post.is_accomplished %}
 
         <div class="col-md-4">
             <a href="{% url 'comodo:detail' post.id %}" class="thumbnail" data-toggle='tooltip' data-placement='bottom'
@@ -15,6 +16,8 @@
                 <p>{{ post.title }}</p>
             </a>
         </div>
+       {% endif %}
+
     {% endfor %}
 
     {#    {% if poll_list %}#}

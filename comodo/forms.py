@@ -4,7 +4,7 @@ from django import forms
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, ButtonHolder, Submit, Div
-from .models import MyUser, Post
+from .models import MyUser, Post,PostConfirmation
 from registration.forms import RegistrationForm
 from django.contrib.auth.forms import AuthenticationForm
 
@@ -69,6 +69,11 @@ class RegistrationsForm(RegistrationForm):
     #         #     Submit('register', 'Kayit Ol', css_class='btn-primary')
     #         # )
     #     )
+
+class PostConfirmationForm(forms.ModelForm):
+    class Meta:
+        model = PostConfirmation
+        fields = ('added_by', 'approved_by')
 
 class LoginForm(AuthenticationForm):
     username = forms.EmailField(required=True)

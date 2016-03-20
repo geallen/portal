@@ -75,7 +75,7 @@ class MyUser(AbstractBaseUser):
     def __str__(self):              # __unicode__ on Python 2
         return self.email
 
-    def has_perm(self, perm, obj=None):
+    def has_perms(self, perm, obj=None):
         "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always
         return True
@@ -112,6 +112,10 @@ class Post(models.Model):
 class PostConfirmation(Post):
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='post_added')
     approved_by = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='post_approved')
+
+    def approve(self):
+        self.is_accomplished = True
+        self.save()
 
     def __unicode__(self):
         return self.user.name

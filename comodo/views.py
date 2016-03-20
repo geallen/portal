@@ -2,11 +2,14 @@ from __future__ import absolute_import
 from django.shortcuts import render
 from django.views import generic
 from .models import Post
-from .forms import RegistrationsForm, EditPostForm, CreatePostForm
+from .forms import RegistrationsForm, EditPostForm, CreatePostForm, LoginForm
 from django.contrib.auth.models import User
 from .models import MyUser
-from django.http import HttpResponseRedirect,HttpResponse
+from django.http import HttpResponseRedirect,HttpResponse,Http404
 from  django.template.context_processors import csrf
+from django.contrib.auth import authenticate, login
+from django.core.urlresolvers import reverse_lazy
+
 
 
 
@@ -60,6 +63,46 @@ def register(request):
     else:
         form = RegistrationsForm  # if the user accessed the register url directly, just display the empty form
     return render(request, 'kayit.html', {'form': form})
+
+# def login(request):
+#
+#     email = request.POST['login_email']
+#     password = request.POST['login_password']
+#     user = authenticate(email=email,password=password)
+#     if request.method == "POST":
+#         form = LoginForm(request.POST)
+#         if form.is_valid():
+#             if user is not None:
+#                 if user.is_active:
+#                     login(request, user)
+#                     return HttpResponseRedirect('/comodo/')
+#                 else:
+#                     return HttpResponse(str("Lutfen Kayit olunuz"))
+#             else:
+#                 return Http404
+#         else:
+#                 return HttpResponse(str((form.errors)))
+#     else:
+#         form = LoginForm
+#     return render(request, 'kayit.html', {'form': form})
+
+class LoginView(generic.FormView):
+    form_class = LoginForm
+    success_url = reverse_lazy('index')
+    template_name = 'kayit.html'
+
+    def form_valid(self, form):
+        form.cleaned_data
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(username=username, password=password)
+
+        if user is not None and user.is_active:
+            login(self.request, user)
+            return super(LoginView, self).form_valid(form)
+        else:
+            return self.form_invalid(form)
+
 #
 #     def form_valid(self, form):
 #         obj = form.save(commit=False)
@@ -101,19 +144,6 @@ class CreatePostView(generic.CreateView):
     model = Post
     template_name = 'post_create.html'
     success_url = '/comodo'
-    # def form_valid(self, form):
-    #     resp = super(CreatePostView, self).form_valid(form)
-    #     form.instance.user = MyUser.objects.get(self.request.user)
-    #     form.instance.save()
-    #     # self.object = form.save(commit=False)
-    #     # self.object.user = self.request.user
-    #     # self.object.save()
-    #     return resp
-
-    # def form_valid(self, form):
-    #     form.instance.user = MyUser.objects.get(user=self.request.user)
-    #     form.instance.save()
-    #     return super(CreatePostForm, self).form_valid(form)
 
 class EditPostView(generic.UpdateView):
     form_class = EditPostForm
